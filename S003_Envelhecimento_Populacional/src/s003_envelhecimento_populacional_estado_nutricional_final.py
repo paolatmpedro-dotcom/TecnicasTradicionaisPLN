@@ -45,8 +45,10 @@ FONTES = {
 
 
 def ensure_dirs() -> None:
+    """Cria a estrutura de diretórios do projeto."""
     for directory in [DATA_DIR, PROCESSED_DIR, METADATA_DIR, LOG_DIR, RESULTS_DIR]:
         directory.mkdir(parents=True, exist_ok=True)
+
     for subdir in [
         DATA_DIR / "ibge",
         DATA_DIR / "sisvan",
@@ -59,6 +61,7 @@ def ensure_dirs() -> None:
 
 
 def fetch_json(url: str, params: dict[str, Any] | None = None) -> Any:
+    """Busca JSON de uma API com timeout e atraso simples entre requisições."""
     response = requests.get(url, params=params, headers=HEADERS, timeout=TIMEOUT)
     response.raise_for_status()
     time.sleep(PAUSA_ENTRE_REQUISICOES)
@@ -66,27 +69,44 @@ def fetch_json(url: str, params: dict[str, Any] | None = None) -> Any:
 
 
 def fetch_ibge_sample() -> list[dict[str, Any]]:
+    """Coleta uma amostra inicial do SIDRA/IBGE."""
     url = f"{URL_IBGE_SIDRA}/t/9514/n1/1/p/2022/v/allxp"
     data = fetch_json(url)
     return data if isinstance(data, list) else []
 
 
 def fetch_sisvan_sample() -> Any:
+    """Coleta uma amostra inicial da API do SISVAN."""
     return fetch_json(URL_SISVAN_API)
 
 
+def write_metadata() -> None:
+    """Grava o arquivo de metadados da execução."""
+    metadata = {
+        "projeto": "S003_Envelhecimento_Populacional",
+        "status": "execucao_ok",
+        "fontes": list(FONTES.keys()),
+        "versao": "final_apresentacao",
+    }
+    (METADATA_DIR / "metadata_execucao.json").write_text(
+        json.dumps(metadata, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
 def main() -> None:
+    """Execução principal do projeto."""
     print("Iniciando execução do projeto S003 — Envelhecimento Populacional")
     ensure_dirs()
-    print(f"Estrutura criada em: {ROOT}")
-    print(f"Fontes mapeadas: {len(FONTES)}")
+    print(f"Diretório raiz do projeto: {ROOT}")
+    print(f"Fontes configuradas: {len(FONTES)}")
 
     try:
         ibge_data = fetch_ibge_sample()
         print(f"IBGE: {len(ibge_data)} registros recebidos")
         if ibge_data:
-            frame = pd.DataFrame(ibge_data)
-            print(f"Colunas do IBGE: {list(frame.columns[:10])}")
+            df = pd.DataFrame(ibge_data)
+            print(f"Colunas do IBGE: {list(df.columns[:10])}")
     except Exception as exc:
         print(f"IBGE falhou: {exc}")
 
@@ -96,18 +116,9 @@ def main() -> None:
     except Exception as exc:
         print(f"SISVAN falhou: {exc}")
 
-    meta = {
-        "projeto": "S003_Envelhecimento_Populacional",
-        "status": "execucao_ok",
-        "fontes": list(FONTES.keys()),
-    }
-    (METADATA_DIR / "metadata_execucao.json").write_text(
-        json.dumps(meta, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-
+    write_metadata()
     print("Execução concluída com sucesso.")
-    print("Arquivo de metadados salvo em:", METADATA_DIR / "metadata_execucao.json")
+    print(f"Metadados salvos em: {METADATA_DIR / 'metadata_execucao.json'}")
 
 
 if __name__ == "__main__":

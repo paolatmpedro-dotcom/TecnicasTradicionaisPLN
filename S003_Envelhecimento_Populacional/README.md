@@ -33,7 +33,8 @@ S003_Envelhecimento_Populacional_GitHub/
 ├── notebooks/
 │   └── README.md
 ├── src/
-│   └── s003_envelhecimento_populacional_estado_nutricional.py
+│   ├── s003_envelhecimento_populacional_estado_nutricional.py
+│   └── s003_envelhecimento_populacional_estado_nutricional_final.py
 ├── dados_brutos/
 │   ├── ibge/
 │   ├── sisvan/
@@ -82,15 +83,15 @@ pip install -r requirements.txt
 
 ### 4. Executar
 
-O arquivo principal está em:
+O script executável usado pelo notebook está em:
 
 ```text
-src/s003_envelhecimento_populacional_estado_nutricional.py
+src/s003_envelhecimento_populacional_estado_nutricional_final.py
 ```
 
-O projeto original foi desenvolvido para execução em ambiente Colab e contém células de instalação/importação, coleta, processamento e análise.
+O notebook em `notebooks/` executa esse script, que prepara as pastas do projeto, consulta amostras do IBGE/SIDRA e do SISVAN e grava metadados. Esta execução demonstrativa ainda não realiza todas as etapas de construção do corpus e análise de PLN descritas neste README e no relatório técnico.
 
-> Recomenda-se executar as etapas na ordem apresentada no arquivo, pois as etapas posteriores dependem das variáveis e arquivos produzidos anteriormente.
+Para executar diretamente pelo terminal, use `python src/s003_envelhecimento_populacional_estado_nutricional_final.py` na raiz do projeto.
 
 ## Pipeline
 
