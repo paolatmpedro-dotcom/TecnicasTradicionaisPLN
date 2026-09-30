@@ -74,12 +74,12 @@ Na execução de 30/09/2026, o script coletou 74 registros únicos. O resultado 
 
 | Tema | Método | P@1 | P@3 | Recall@3 | MRR |
 |---|---|---:|---:|---:|---:|
-| Envelhecimento | TF-IDF | 1,000 | 0,333 | 1,000 | 1,000 |
-| Envelhecimento | Baseline lexical | 0,000 | 0,333 | 1,000 | 0,500 |
+| Envelhecimento | TF-IDF | 0,000 | 0,000 | 0,000 | 0,000 |
+| Envelhecimento | Baseline lexical | 0,000 | 0,000 | 0,000 | 0,000 |
 | Estado nutricional | TF-IDF | 1,000 | 0,333 | 0,056 | 1,000 |
 | Estado nutricional | Baseline lexical | 1,000 | 0,333 | 0,056 | 1,000 |
-| Sarcopenia | TF-IDF | 1,000 | 1,000 | 0,375 | 1,000 |
-| Sarcopenia | Baseline lexical | 1,000 | 1,000 | 0,375 | 1,000 |
+| Sarcopenia | TF-IDF | 1,000 | 0,667 | 0,333 | 1,000 |
+| Sarcopenia | Baseline lexical | 1,000 | 1,000 | 0,500 | 1,000 |
 
 Os resultados não devem ser generalizados: os rótulos heurísticos identificaram 1 documento de envelhecimento, 18 de estado nutricional e 8 de sarcopenia no snapshot. Os CSVs em `resultados/` registram métricas, ranking Top-3, falsos positivos e documentos relevantes heurísticos não recuperados no Top-3.
 
@@ -100,11 +100,11 @@ Além disso:
 
 ## 12. Visualizações
 
-O pipeline gera quatro arquivos PNG: documentos por tema, termos com maior TF-IDF médio, comparação das métricas entre métodos e relevância heurística dos resultados TF-IDF no Top-3.
+O pipeline gera cinco arquivos PNG: documentos por tema, termos com maior TF-IDF médio, comparação das métricas entre métodos, relevância heurística dos resultados TF-IDF no Top-3 e nuvem de palavras do corpus.
 
 ## 13. Reprodutibilidade
 
-Na raiz do projeto, execute `python -m pip install -r requirements.txt` e depois `python src/s003_envelhecimento_populacional_estado_nutricional_final.py`. A coleta e os resultados são atualizados em tempo de execução. O corpus textual bruto e processado fica local; o manifesto bibliográfico, as métricas agregadas e os quatro gráficos podem ser versionados.
+Na raiz do projeto, execute `python -m pip install -r requirements.txt` e depois `python src/s003_envelhecimento_populacional_estado_nutricional_final.py`. A coleta e os resultados são atualizados em tempo de execução. O corpus textual bruto e processado fica local; o manifesto bibliográfico, as métricas agregadas e os cinco gráficos podem ser versionados.
 
 ## 14. Entregáveis
 
@@ -115,7 +115,7 @@ O repositório GitHub contém:
 - requisitos de instalação;
 - notebook executável e código de coleta/análise;
 - manifesto de identificadores do corpus;
-- métricas agregadas e quatro gráficos;
+- métricas agregadas e cinco gráficos;
 - pastas de dados processados, logs e resultados gerados localmente;
 - relatório técnico.
 

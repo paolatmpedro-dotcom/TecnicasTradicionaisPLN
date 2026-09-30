@@ -18,6 +18,7 @@ import seaborn as sns
 from nltk.stem import SnowballStemmer
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from wordcloud import WordCloud
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "dados_brutos"
@@ -441,6 +442,30 @@ def save_visualizations(
     fig.tight_layout()
     path = RESULTS_DIR / "04_relevancia_top3.png"
     fig.savefig(path, dpi=160)
+    plt.close(fig)
+    figure_paths.append(path.name)
+
+    cloud_stopwords = STOPWORDS["eng"] | STOPWORDS["por"] | {
+        "study", "studies", "results", "method", "methods", "patients",
+        "participants", "using", "data", "years",
+    }
+    cloud = WordCloud(
+        width=1400,
+        height=760,
+        background_color="white",
+        colormap="viridis",
+        max_words=100,
+        stopwords=cloud_stopwords,
+        collocations=False,
+        random_state=42,
+    ).generate(" ".join(corpus["texto"].dropna().astype(str)))
+    fig, ax = plt.subplots(figsize=(12, 6.5))
+    ax.imshow(cloud, interpolation="bilinear")
+    ax.set_title("Nuvem de palavras do corpus", pad=14)
+    ax.axis("off")
+    fig.tight_layout()
+    path = RESULTS_DIR / "05_nuvem_palavras.png"
+    fig.savefig(path, dpi=160, bbox_inches="tight")
     plt.close(fig)
     figure_paths.append(path.name)
     return figure_paths

@@ -10,7 +10,7 @@
 - [x] LICENSE
 - [x] Manifesto bibliográfico do corpus
 - [x] Metadados da execução
-- [x] Métricas agregadas e quatro visualizações
+- [x] Métricas agregadas e cinco visualizações, incluindo nuvem de palavras
 - [x] Logs
 - [x] Relatório técnico
 

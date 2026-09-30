@@ -89,7 +89,7 @@ O script executável usado pelo notebook está em:
 src/s003_envelhecimento_populacional_estado_nutricional_final.py
 ```
 
-O notebook em `notebooks/` executa esse script, que coleta até 25 artigos por tema do PubMed, deduplica por PMID, gera o corpus, aplica pré-processamento, compara busca TF-IDF com baseline lexical, avalia resultados e cria quatro gráficos. Os rótulos de relevância são heurísticos e não substituem anotação humana.
+O notebook em `notebooks/` executa esse script, que coleta até 25 artigos por tema do PubMed, deduplica por PMID, gera o corpus, aplica pré-processamento, compara busca TF-IDF com baseline lexical, avalia resultados e cria cinco gráficos, incluindo uma nuvem de palavras. Os rótulos de relevância são heurísticos e não substituem anotação humana.
 
 Para executar diretamente pelo terminal, use `python src/s003_envelhecimento_populacional_estado_nutricional_final.py` na raiz do projeto.
 
@@ -135,7 +135,7 @@ Como comparação, é utilizado um:
 
 As métricas são Precision@1, Precision@3, Recall@3 e MRR. A análise de erros registra falsos positivos e documentos relevantes heurísticos que ficaram fora do Top-3. Como a tarefa é ranqueamento, não se usa matriz de confusão.
 
-As categorias são inferidas por regras de palavras-chave em títulos e resumos; os rótulos não são revisados por anotadores. Portanto, a avaliação é exploratória. Os registros brutos e o corpus processado são gerados localmente; o manifesto bibliográfico, as métricas agregadas e os quatro gráficos ficam disponíveis como entregáveis versionáveis.
+As categorias são inferidas por regras de palavras-chave em títulos e resumos; os rótulos não são revisados por anotadores. Portanto, a avaliação é exploratória. Os registros brutos e o corpus processado são gerados localmente; o manifesto bibliográfico, as métricas agregadas e os cinco gráficos ficam disponíveis como entregáveis versionáveis.
 
 O pipeline gera:
 
@@ -143,6 +143,7 @@ O pipeline gera:
 - `resultados/02_termos_tfidf.png`
 - `resultados/03_comparacao_metricas.png`
 - `resultados/04_relevancia_top3.png`
+- `resultados/05_nuvem_palavras.png`
 
 ## Limitações
 

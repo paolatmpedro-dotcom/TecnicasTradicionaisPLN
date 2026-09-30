@@ -21,6 +21,7 @@ logs/*.log
 !resultados/02_termos_tfidf.png
 !resultados/03_comparacao_metricas.png
 !resultados/04_relevancia_top3.png
+!resultados/05_nuvem_palavras.png
 
 # Arquivos compactados e temporários
 *.zip

@@ -1,7 +1,7 @@
 {
   "projeto": "S003_Envelhecimento_Populacional",
   "status": "concluido",
-  "executado_em_utc": "2026-09-30T20:50:34+00:00",
+  "executado_em_utc": "2026-09-30T21:00:20+00:00",
   "fonte_coletada": "NCBI PubMed E-utilities",
   "consultas": {
     "envelhecimento": "(elderly[Title/Abstract] OR aged[Title/Abstract] OR \"older adults\"[Title/Abstract]) AND (Brazil[Title/Abstract] OR Brazilian[Title/Abstract])",
@@ -12,7 +12,7 @@
   "documentos_por_categoria": {
     "envelhecimento": 1,
     "estado_nutricional": 18,
-    "sarcopenia": 8
+    "sarcopenia": 6
   },
   "coleta_por_consulta": [
     {
@@ -53,7 +53,8 @@
     "01_documentos_por_tema.png",
     "02_termos_tfidf.png",
     "03_comparacao_metricas.png",
-    "04_relevancia_top3.png"
+    "04_relevancia_top3.png",
+    "05_nuvem_palavras.png"
   ],
   "arquivos_gerados": [
     "dados_brutos/pubmed/pubmed_corpus.json",
