@@ -9,10 +9,18 @@ env/
 dados_brutos/**/*.json
 dados_brutos/**/*.txt
 dados_processados/*.txt
+dados_processados/*.csv
 resultados/*.csv
 resultados/*.json
 resultados/*.png
 logs/*.log
+
+# Artefatos agregados e gráficos publicados como entregáveis
+!resultados/metricas_busca.csv
+!resultados/01_documentos_por_tema.png
+!resultados/02_termos_tfidf.png
+!resultados/03_comparacao_metricas.png
+!resultados/04_relevancia_top3.png
 
 # Arquivos compactados e temporários
 *.zip

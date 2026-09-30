@@ -1,14 +1,66 @@
 {
   "projeto": "S003_Envelhecimento_Populacional",
-  "status": "execucao_ok",
-  "fontes": [
-    "IBGE SIDRA",
-    "IBGE Censo 2022",
-    "SISVAN API",
-    "SISVAN Dados Abertos",
-    "Ministério da Saúde - Nutrição da pessoa idosa",
-    "NCBI PubMed",
-    "Crossref API"
+  "status": "concluido",
+  "executado_em_utc": "2026-09-30T20:50:34+00:00",
+  "fonte_coletada": "NCBI PubMed E-utilities",
+  "consultas": {
+    "envelhecimento": "(elderly[Title/Abstract] OR aged[Title/Abstract] OR \"older adults\"[Title/Abstract]) AND (Brazil[Title/Abstract] OR Brazilian[Title/Abstract])",
+    "estado_nutricional": "(nutrition[Title/Abstract] OR nutritional[Title/Abstract] OR malnutrition[Title/Abstract]) AND (elderly[Title/Abstract] OR aged[Title/Abstract]) AND (Brazil[Title/Abstract] OR Brazilian[Title/Abstract])",
+    "sarcopenia": "(sarcopenia[Title/Abstract] OR frailty[Title/Abstract]) AND (elderly[Title/Abstract] OR aged[Title/Abstract]) AND (Brazil[Title/Abstract] OR Brazilian[Title/Abstract])"
+  },
+  "documentos_unicos": 74,
+  "documentos_por_categoria": {
+    "envelhecimento": 1,
+    "estado_nutricional": 18,
+    "sarcopenia": 8
+  },
+  "coleta_por_consulta": [
+    {
+      "categoria": "envelhecimento",
+      "total_encontrado": 15788,
+      "coletado": 25
+    },
+    {
+      "categoria": "estado_nutricional",
+      "total_encontrado": 1160,
+      "coletado": 25
+    },
+    {
+      "categoria": "sarcopenia",
+      "total_encontrado": 321,
+      "coletado": 25
+    }
   ],
-  "versao": "final_apresentacao"
+  "pre_processamento": [
+    "normalizacao Unicode e conversao para minusculas",
+    "remocao de acentos e pontuacao",
+    "tokenizacao por expressao regular",
+    "remocao de stopwords em ingles e portugues",
+    "stemming Snowball conforme idioma registrado no PubMed"
+  ],
+  "representacao": "TF-IDF com unigramas e bigramas",
+  "avaliacao": {
+    "metrica": [
+      "Precision@1",
+      "Precision@3",
+      "Recall@3",
+      "MRR"
+    ],
+    "baseline": "sobreposicao lexical",
+    "rotulos": "heuristicos, inferidos por palavras-chave no titulo e resumo; nao sao anotacao humana"
+  },
+  "visualizacoes": [
+    "01_documentos_por_tema.png",
+    "02_termos_tfidf.png",
+    "03_comparacao_metricas.png",
+    "04_relevancia_top3.png"
+  ],
+  "arquivos_gerados": [
+    "dados_brutos/pubmed/pubmed_corpus.json",
+    "dados_processados/corpus_processado.csv",
+    "resultados/metricas_busca.csv",
+    "resultados/ranking_busca_top3.csv",
+    "resultados/analise_erros.csv",
+    "metadados/corpus_manifest.csv"
+  ]
 }

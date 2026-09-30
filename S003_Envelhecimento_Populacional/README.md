@@ -4,7 +4,7 @@
 
 Este projeto constrói e analisa um corpus relacionado ao **envelhecimento populacional no Brasil** e ao **estado nutricional da população com 60 anos ou mais**.
 
-O trabalho integra dados públicos, informações institucionais e literatura científica, utilizando fontes como **IBGE/SIDRA, SISVAN/Ministério da Saúde, DATASUS, PubMed e Crossref**.
+O pipeline atualmente executável coleta literatura científica do **NCBI PubMed**. IBGE/SIDRA, SISVAN/Ministério da Saúde, DATASUS, Crossref e páginas institucionais são fontes planejadas para ampliações futuras, ainda não integradas ao script.
 
 ## Objetivo
 
@@ -89,34 +89,24 @@ O script executável usado pelo notebook está em:
 src/s003_envelhecimento_populacional_estado_nutricional_final.py
 ```
 
-O notebook em `notebooks/` executa esse script, que prepara as pastas do projeto, consulta amostras do IBGE/SIDRA e do SISVAN e grava metadados. Esta execução demonstrativa ainda não realiza todas as etapas de construção do corpus e análise de PLN descritas neste README e no relatório técnico.
+O notebook em `notebooks/` executa esse script, que coleta até 25 artigos por tema do PubMed, deduplica por PMID, gera o corpus, aplica pré-processamento, compara busca TF-IDF com baseline lexical, avalia resultados e cria quatro gráficos. Os rótulos de relevância são heurísticos e não substituem anotação humana.
 
 Para executar diretamente pelo terminal, use `python src/s003_envelhecimento_populacional_estado_nutricional_final.py` na raiz do projeto.
 
 ## Pipeline
 
 ```text
-Fontes públicas
+PubMed E-utilities
       ↓
-Coleta por APIs
+Coleta por temas e deduplicação por PMID
       ↓
-Web scraping
+Corpus bibliográfico bruto
       ↓
-Dados brutos
+Normalização, stopwords e stemming
       ↓
-Limpeza e validação
+Corpus processado e TF-IDF
       ↓
-Deduplicação
-      ↓
-Metadados
-      ↓
-Corpus processado
-      ↓
-Pré-processamento de PLN
-      ↓
-TF-IDF
-      ↓
-Similaridade do cosseno
+Busca por cosseno e baseline lexical
       ↓
 Baseline lexical
       ↓
@@ -125,21 +115,17 @@ Precision@1 / Precision@3 / Recall@3 / MRR
 Análise de erros
 ```
 
-## Fontes utilizadas
+## Fonte implementada
 
-- IBGE / SIDRA
-- Censo Demográfico 2022
-- SISVAN / Ministério da Saúde
-- DATASUS
-- NCBI PubMed
-- Crossref
-- páginas institucionais relacionadas à pessoa idosa e nutrição
+- **NCBI PubMed E-utilities**, para títulos, resumos e metadados bibliográficos.
+
+IBGE/SIDRA, Censo, SISVAN, DATASUS, Crossref e páginas institucionais são fontes planejadas, mas ainda não são consultadas pelo script.
 
 ## Metodologia
 
-O corpus é organizado por categorias e recebe metadados de origem, arquivo, codificação, status, tamanho e hash SHA-256.
+O corpus combina título e resumo, remove duplicatas por PMID e mantém metadados bibliográficos. O pré-processamento é bilíngue (português/inglês), com normalização, tokenização, stopwords e stemming Snowball. A representação usa TF-IDF com unigramas e bigramas.
 
-A busca textual utiliza:
+A busca textual compara:
 
 **TF-IDF + similaridade de cosseno**
 
@@ -147,14 +133,16 @@ Como comparação, é utilizado um:
 
 **baseline por sobreposição lexical de palavras**
 
-A avaliação considera:
+As métricas são Precision@1, Precision@3, Recall@3 e MRR. A análise de erros registra falsos positivos e documentos relevantes heurísticos que ficaram fora do Top-3. Como a tarefa é ranqueamento, não se usa matriz de confusão.
 
-- Precision@1
-- Precision@3
-- Recall@3
-- MRR
+As categorias são inferidas por regras de palavras-chave em títulos e resumos; os rótulos não são revisados por anotadores. Portanto, a avaliação é exploratória. Os registros brutos e o corpus processado são gerados localmente; o manifesto bibliográfico, as métricas agregadas e os quatro gráficos ficam disponíveis como entregáveis versionáveis.
 
-A análise também registra falsos positivos e falsos negativos no Top-3.
+O pipeline gera:
+
+- `resultados/01_documentos_por_tema.png`
+- `resultados/02_termos_tfidf.png`
+- `resultados/03_comparacao_metricas.png`
+- `resultados/04_relevancia_top3.png`
 
 ## Limitações
 

@@ -1,0 +1,7 @@
+﻿categoria,consulta,metodo,precision_at_1,precision_at_3,recall_at_3,mrr,documentos_relevantes_rotulo_heuristico
+envelhecimento,demographic transition longevity Brazil older populations,TF-IDF,1.0,0.3333333333333333,1.0,1.0,1
+envelhecimento,demographic transition longevity Brazil older populations,Baseline lexical,0.0,0.3333333333333333,1.0,0.5,1
+estado_nutricional,diet quality body composition Brazil seniors,TF-IDF,1.0,0.3333333333333333,0.05555555555555555,1.0,18
+estado_nutricional,diet quality body composition Brazil seniors,Baseline lexical,1.0,0.3333333333333333,0.05555555555555555,1.0,18
+sarcopenia,muscle strength decline physical vulnerability Brazil,TF-IDF,1.0,1.0,0.375,1.0,8
+sarcopenia,muscle strength decline physical vulnerability Brazil,Baseline lexical,1.0,1.0,0.375,1.0,8

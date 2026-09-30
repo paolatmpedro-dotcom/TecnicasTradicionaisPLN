@@ -8,50 +8,31 @@
 
 ## 2. Problema
 
-O projeto busca organizar informações de diferentes fontes públicas sobre envelhecimento populacional, população com 60 anos ou mais e estado nutricional, transformando essas informações em um corpus utilizável em um fluxo de PLN.
+O projeto demonstra a construção de um corpus bibliográfico sobre envelhecimento, estado nutricional e sarcopenia em estudos relacionados ao Brasil. Nesta versão, a coleta implementada consulta títulos, resumos e metadados do PubMed; as demais fontes listadas no planejamento ainda não são integradas ao pipeline executável.
 
 ## 3. Objetivo geral
 
-Construir e analisar um corpus relacionado ao envelhecimento populacional e ao estado nutricional da população idosa no Brasil, integrando diferentes fontes públicas e aplicando técnicas de PLN para organização, representação e recuperação de informações.
+Construir e analisar um corpus bibliográfico reproduzível e aplicar técnicas de PLN para recuperar documentos relacionados ao envelhecimento e ao estado nutricional da população idosa no Brasil.
 
 ## 4. Fontes
 
-As fontes previstas no projeto incluem:
+### Fonte efetivamente consultada
 
-- IBGE/SIDRA;
-- Censo Demográfico;
-- SISVAN/Ministério da Saúde;
-- DATASUS;
-- NCBI PubMed;
-- Crossref;
-- páginas institucionais.
+- **NCBI PubMed E-utilities:** consultas por tema e recuperação de registros bibliográficos (PMID, título, resumo, periódico, ano, idioma e DOI quando disponível).
+
+IBGE/SIDRA, Censo, SISVAN, DATASUS, Crossref e páginas institucionais permanecem como fontes planejadas, mas não são coletadas pelo script desta versão.
 
 ## 5. Construção do corpus
 
-O pipeline realiza:
+O script consulta até 25 registros por tema em três consultas PubMed: envelhecimento, estado nutricional e sarcopenia/fragilidade. Os registros são deduplicados por PMID e as consultas de origem são preservadas. Títulos e resumos são consolidados em um corpus; o manifesto em `metadados/corpus_manifest.csv` registra identificadores e metadados bibliográficos sem incluir o texto dos resumos.
 
-1. preparação do ambiente;
-2. organização das pastas;
-3. coleta por APIs;
-4. coleta por web scraping;
-5. armazenamento dos dados brutos;
-6. leitura e tratamento de codificação;
-7. validação dos documentos;
-8. cálculo de hash SHA-256;
-9. deduplicação;
-10. geração de metadados;
-11. consolidação do corpus;
-12. pré-processamento;
-13. representação TF-IDF;
-14. busca por similaridade;
-15. avaliação;
-16. análise dos erros.
+O corpus textual bruto é salvo em `dados_brutos/pubmed/pubmed_corpus.json`, e a versão processada em `dados_processados/corpus_processado.csv`. Esses arquivos são gerados localmente e ignorados pelo Git; execute novamente o script para reconstruí-los.
 
 ## 6. Pré-processamento
 
-O projeto trabalha com texto em português e contempla tokenização, stopwords, normalização, tratamento de ruídos e stemming/lematização conforme as etapas implementadas.
+O pré-processamento usa o idioma informado pelo PubMed para selecionar stopwords e o stemmer Snowball em português ou inglês. As etapas são normalização Unicode, conversão para minúsculas, remoção de acentos e pontuação, tokenização por expressão regular, remoção de stopwords e stemming. A língua predominante dos registros é variável e pode ser inglês; não se traduzem documentos.
 
-A representação principal utilizada na recuperação textual é TF-IDF.
+A representação textual é TF-IDF com unigramas e bigramas, usando frequência de termo sublinear.
 
 ## 7. Busca textual
 
@@ -59,21 +40,17 @@ A abordagem principal é a recuperação de documentos por:
 
 **TF-IDF + similaridade de cosseno.**
 
-As consultas de avaliação são relacionadas a:
-
-- população e envelhecimento;
-- estado nutricional e alimentação;
-- sarcopenia, envelhecimento e literatura científica.
+As consultas de avaliação exploram três temas: transição demográfica, qualidade da dieta/composição corporal e força muscular/fragilidade física. Elas são comparadas com documentos do corpus por similaridade do cosseno.
 
 ## 8. Baseline
 
-O baseline utiliza sobreposição de palavras entre a consulta e o documento.
+O baseline utiliza a proporção de termos da consulta que também aparecem no documento pré-processado.
 
 Essa comparação permite observar o comportamento da representação TF-IDF em relação a uma estratégia lexical simples.
 
 ## 9. Avaliação
 
-São utilizadas:
+São utilizadas Precision@1, Precision@3, Recall@3 e Mean Reciprocal Rank (MRR). Os rótulos de relevância são inferidos por regras de palavras-chave no título e resumo, independentemente da consulta de coleta. São **rótulos heurísticos**, não uma anotação humana independente; portanto, as métricas são exploratórias e podem favorecer métodos lexicais. Para uma avaliação conclusiva, é necessário revisar e anotar manualmente um conjunto de julgamentos.
 
 ### Precision@1
 
@@ -91,48 +68,57 @@ Mede quanto dos documentos relevantes disponíveis foram recuperados no Top-3.
 
 Considera a posição do primeiro documento relevante.
 
-## 10. Análise de erros
+## 10. Resultados e análise de erros
 
-São registrados:
+Na execução de 30/09/2026, o script coletou 74 registros únicos. O resultado é dinâmico e pode variar conforme a atualização do PubMed. Métricas do snapshot gerado:
 
-- falsos positivos;
-- falsos negativos fora do Top-3.
+| Tema | Método | P@1 | P@3 | Recall@3 | MRR |
+|---|---|---:|---:|---:|---:|
+| Envelhecimento | TF-IDF | 1,000 | 0,333 | 1,000 | 1,000 |
+| Envelhecimento | Baseline lexical | 0,000 | 0,333 | 1,000 | 0,500 |
+| Estado nutricional | TF-IDF | 1,000 | 0,333 | 0,056 | 1,000 |
+| Estado nutricional | Baseline lexical | 1,000 | 0,333 | 0,056 | 1,000 |
+| Sarcopenia | TF-IDF | 1,000 | 1,000 | 0,375 | 1,000 |
+| Sarcopenia | Baseline lexical | 1,000 | 1,000 | 0,375 | 1,000 |
 
-A análise considera que termos genéricos como “envelhecimento”, “saúde”, “população” e “idosos” podem favorecer documentos lexicalmente semelhantes.
+Os resultados não devem ser generalizados: os rótulos heurísticos identificaram 1 documento de envelhecimento, 18 de estado nutricional e 8 de sarcopenia no snapshot. Os CSVs em `resultados/` registram métricas, ranking Top-3, falsos positivos e documentos relevantes heurísticos não recuperados no Top-3.
+
+A matriz de confusão não é aplicada porque a tarefa implementada é ranqueamento de busca, não classificação binária por documento.
 
 ## 11. Limitações
 
-O corpus pode ser pequeno em determinadas etapas do projeto. Isso limita a generalização dos resultados e torna inadequada uma avaliação supervisionada robusta quando não há quantidade suficiente de exemplos por classe.
+O corpus é uma amostra de até 25 registros por consulta, ordenada por relevância pelo PubMed; não é uma amostra probabilística. A coleta depende da disponibilidade da API, da formulação das consultas e do idioma dos resumos. O corpus pode conter artigos duplicados entre temas, resolvidos por PMID.
 
 Além disso:
 
-- páginas públicas podem sofrer alterações;
-- APIs podem mudar seus endpoints;
-- disponibilidade dos dados pode variar;
-- categorias derivadas da origem não substituem anotação humana;
-- frequência de palavras não representa automaticamente relevância temática.
+- as categorias heurísticas não substituem julgamento humano e podem introduzir viés lexical;
+- o baseline e os rótulos usam sinais de palavras, o que pode inflar ou distorcer a comparação;
+- sinônimos e diferenças entre português e inglês podem reduzir a recuperação;
+- os resultados mudam quando o PubMed atualiza registros ou a ordem de relevância;
+- frequência lexical e similaridade não equivalem a importância clínica;
+- uma amostra maior e julgamentos humanos independentes são necessários para conclusões robustas.
 
-## 12. Reprodutibilidade
+## 12. Visualizações
 
-O código registra as fontes utilizadas e organiza os resultados em pastas específicas. As coletas são realizadas em tempo de execução, portanto os resultados podem mudar quando as fontes externas forem atualizadas.
+O pipeline gera quatro arquivos PNG: documentos por tema, termos com maior TF-IDF médio, comparação das métricas entre métodos e relevância heurística dos resultados TF-IDF no Top-3.
 
-## 13. Entregáveis
+## 13. Reprodutibilidade
+
+Na raiz do projeto, execute `python -m pip install -r requirements.txt` e depois `python src/s003_envelhecimento_populacional_estado_nutricional_final.py`. A coleta e os resultados são atualizados em tempo de execução. O corpus textual bruto e processado fica local; o manifesto bibliográfico, as métricas agregadas e os quatro gráficos podem ser versionados.
+
+## 14. Entregáveis
 
 O repositório GitHub contém:
 
 - código principal;
 - documentação;
 - requisitos de instalação;
-- estrutura do corpus;
-- pasta para dados brutos;
-- pasta para dados processados;
-- metadados;
-- resultados;
-- logs;
+- notebook executável e código de coleta/análise;
+- manifesto de identificadores do corpus;
+- métricas agregadas e quatro gráficos;
+- pastas de dados processados, logs e resultados gerados localmente;
 - relatório técnico.
 
-## 14. Conclusão
+## 15. Conclusão
 
-O projeto apresenta um fluxo completo de construção e análise de corpus, desde a coleta de dados públicos até a recuperação de documentos por TF-IDF e avaliação por métricas de busca.
-
-O pipeline permite documentar as etapas de coleta, organização, processamento, representação e avaliação, mantendo explícitas as limitações relacionadas ao tamanho e à composição do corpus.
+O projeto implementa um fluxo reproduzível de coleta bibliográfica, pré-processamento, busca TF-IDF, comparação com baseline, avaliação exploratória, análise de erros e visualização. A avaliação ainda depende de rótulos heurísticos; a próxima melhoria metodológica é criar julgamentos humanos independentes e ampliar as fontes do corpus.
