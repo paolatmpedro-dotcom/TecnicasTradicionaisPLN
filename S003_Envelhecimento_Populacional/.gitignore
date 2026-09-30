@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# Dados e resultados gerados automaticamente
+dados_brutos/**/*.json
+dados_brutos/**/*.txt
+dados_processados/*.txt
+resultados/*.csv
+resultados/*.json
+resultados/*.png
+logs/*.log
+
+# Arquivos compactados e temporários
+*.zip
+*.tmp
+*.bak
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
