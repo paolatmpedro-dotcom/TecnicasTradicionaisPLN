@@ -1,0 +1,13 @@
+{
+  "projeto": "S003_Envelhecimento_Populacional",
+  "status": "execucao_ok",
+  "fontes": [
+    "IBGE SIDRA",
+    "IBGE Censo 2022",
+    "SISVAN API",
+    "SISVAN Dados Abertos",
+    "Ministério da Saúde - Nutrição da pessoa idosa",
+    "NCBI PubMed",
+    "Crossref API"
+  ]
+}
