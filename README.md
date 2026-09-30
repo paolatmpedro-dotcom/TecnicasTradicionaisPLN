@@ -1,174 +1,32 @@
-# S003 — Envelhecimento Populacional no Brasil e Estado Nutricional
+# Técnicas Tradicionais de Processamento de Linguagem Natural
 
-## Construção, ampliação, organização e análise de um corpus para PLN
+Este repositório foi desenvolvido como parte das atividades da disciplina **Tópicos em Computação II**, correspondendo à **primeira etapa do trabalho**, com foco no estudo e na aplicação de **Técnicas Tradicionais de Processamento de Linguagem Natural (PLN)**.
 
-Este projeto constrói e analisa um corpus relacionado ao **envelhecimento populacional no Brasil** e ao **estado nutricional da população com 60 anos ou mais**.
+O objetivo desta etapa é explorar métodos clássicos utilizados no processamento e na análise de textos, compreendendo desde a preparação dos dados até a aplicação de técnicas de processamento textual e análise dos resultados.
 
-O trabalho integra dados públicos, informações institucionais e literatura científica, utilizando fontes como **IBGE/SIDRA, SISVAN/Ministério da Saúde, DATASUS, PubMed e Crossref**.
+Ao longo do projeto, são apresentados notebooks, códigos e materiais desenvolvidos para demonstrar a aplicação prática das técnicas estudadas na disciplina. O trabalho busca relacionar os conceitos teóricos de PLN com sua implementação prática em Python, permitindo observar as diferentes etapas envolvidas no tratamento de dados textuais.
 
-## Objetivo
+O repositório também serve como espaço de organização e documentação das atividades desenvolvidas durante a primeira etapa do trabalho, reunindo os experimentos, códigos, dados utilizados e resultados obtidos.
 
-Construir e analisar um corpus temático, aplicando técnicas de Processamento de Linguagem Natural (PLN) para:
+## Objetivos
 
-- coleta e organização dos dados;
-- limpeza e validação textual;
-- deduplicação;
-- geração de metadados;
-- pré-processamento em português;
-- representação TF-IDF;
-- busca por similaridade;
-- comparação com baseline lexical;
-- avaliação por Precision@1, Precision@3, Recall@3 e MRR;
-- análise de erros de recuperação.
+* Estudar conceitos fundamentais de Processamento de Linguagem Natural;
+* Aplicar técnicas tradicionais de PLN em dados textuais;
+* Realizar etapas de preparação e pré-processamento de textos;
+* Explorar métodos de análise e representação textual;
+* Documentar os procedimentos e resultados obtidos durante os experimentos;
+* Desenvolver uma base para as próximas etapas do trabalho.
 
-## Estrutura
+## Organização do Repositório
 
-```text
-S003_Envelhecimento_Populacional_GitHub/
-├── README.md
-├── requirements.txt
-├── LICENSE
-├── .gitignore
-├── RELATORIO_TECNICO.md
-├── notebooks/
-│   └── README.md
-├── src/
-│   └── s003_envelhecimento_populacional_estado_nutricional.py
-├── dados_brutos/
-│   ├── ibge/
-│   ├── sisvan/
-│   ├── datasus/
-│   ├── pubmed/
-│   ├── crossref/
-│   └── web_scraping/
-├── dados_processados/
-├── metadados/
-├── resultados/
-└── logs/
-```
+O repositório está organizado de forma a facilitar a identificação dos notebooks, códigos, dados e resultados produzidos durante o desenvolvimento do projeto.
 
-## Como executar
+Os materiais disponibilizados representam as atividades e experimentos realizados na primeira etapa da disciplina, permitindo acompanhar o processo desde a preparação dos dados até a análise dos resultados.
 
-### 1. Clonar o repositório
+## Disciplina
 
-```bash
-git clone URL_DO_SEU_REPOSITORIO
-cd S003_Envelhecimento_Populacional_GitHub
-```
+**Tópicos em Computação II**
 
-### 2. Criar ambiente virtual
+**Tema:** Técnicas Tradicionais de Processamento de Linguagem Natural (PLN)
 
-```bash
-python -m venv .venv
-```
-
-Windows:
-
-```bash
-.venv\Scripts\activate
-```
-
-Linux/macOS:
-
-```bash
-source .venv/bin/activate
-```
-
-### 3. Instalar dependências
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Executar
-
-O arquivo principal está em:
-
-```text
-src/s003_envelhecimento_populacional_estado_nutricional.py
-```
-
-O projeto original foi desenvolvido para execução em ambiente Colab e contém células de instalação/importação, coleta, processamento e análise.
-
-> Recomenda-se executar as etapas na ordem apresentada no arquivo, pois as etapas posteriores dependem das variáveis e arquivos produzidos anteriormente.
-
-## Pipeline
-
-```text
-Fontes públicas
-      ↓
-Coleta por APIs
-      ↓
-Web scraping
-      ↓
-Dados brutos
-      ↓
-Limpeza e validação
-      ↓
-Deduplicação
-      ↓
-Metadados
-      ↓
-Corpus processado
-      ↓
-Pré-processamento de PLN
-      ↓
-TF-IDF
-      ↓
-Similaridade do cosseno
-      ↓
-Baseline lexical
-      ↓
-Precision@1 / Precision@3 / Recall@3 / MRR
-      ↓
-Análise de erros
-```
-
-## Fontes utilizadas
-
-- IBGE / SIDRA
-- Censo Demográfico 2022
-- SISVAN / Ministério da Saúde
-- DATASUS
-- NCBI PubMed
-- Crossref
-- páginas institucionais relacionadas à pessoa idosa e nutrição
-
-## Metodologia
-
-O corpus é organizado por categorias e recebe metadados de origem, arquivo, codificação, status, tamanho e hash SHA-256.
-
-A busca textual utiliza:
-
-**TF-IDF + similaridade de cosseno**
-
-Como comparação, é utilizado um:
-
-**baseline por sobreposição lexical de palavras**
-
-A avaliação considera:
-
-- Precision@1
-- Precision@3
-- Recall@3
-- MRR
-
-A análise também registra falsos positivos e falsos negativos no Top-3.
-
-## Limitações
-
-O próprio projeto registra que um corpus pequeno limita a capacidade de generalização. A categorização por origem não equivale a uma anotação humana independente, e frequência lexical não deve ser interpretada automaticamente como importância temática.
-
-Por isso, a classificação supervisionada não é apresentada como resultado principal quando não existem exemplos suficientes por classe.
-
-## Reprodutibilidade
-
-Os dados coletados por APIs e scraping podem variar conforme disponibilidade das fontes, alterações nos endpoints e conteúdo publicado. Por isso, o repositório mantém o código e a metodologia, enquanto dados gerados automaticamente são tratados como artefatos de execução.
-
-## Autoria
-
-Projeto acadêmico — S003.
-
-## Licença
-
-MIT License.
+**Etapa:** Primeira etapa do trabalho
